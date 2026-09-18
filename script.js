@@ -1,156 +1,152 @@
-const menuToggle = document.querySelector(".icon-menu");
-const sidebar = document.querySelector(".sidebar");
-const closeSidebar = document.querySelector(".close-sidebar");
+const filterButtons = document.querySelectorAll(".filter-btn");
+const cattleCards = document.querySelectorAll(".service-content");
 
+filterButtons.forEach(button => {
+    button.addEventListener("click", () => {
 
- 
+        // Active button
+        filterButtons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
 
-menuToggle.addEventListener("click", function (event) {
+        const filter = button.dataset.filter;
 
-    event.preventDefault();
+        cattleCards.forEach(card => {
+            const category = card.dataset.category;
 
-    sidebar.classList.toggle("active");
-});
-
-closeSidebar.addEventListener("click", function (event) {
-
-    event.preventDefault();
-
-    sidebar.classList.remove("active");
-
-});
-
-const navlinks = document.querySelectorAll(".sidebar a")
-
-  navlinks.forEach(link=> {
-         link.addEventListener('click',()=>{
-          
-        navlinks.forEach(otherlink => {
-
-            if (otherlink !== link ) {
-                sidebar.classList.remove('active')
+            if (filter === "all" || category === filter) {
+                card.classList.remove("hide");
+            } else {
+                card.classList.add("hide");
             }
         });
-        link.classList.add('active');
-    })
- });
+
+    });
+});
+
+
+const burgerMenu = document.querySelector(".burger-menu");
+const navLinks = document.querySelector(".nav-links");
+const closeBtn = document.querySelector(".close-btn");
+const navItems = document.querySelectorAll(".nav-links a");
+
+burgerMenu.addEventListener("click", () => {
+    navLinks.classList.add("active");
+});
+
+closeBtn.addEventListener("click", () => {
+    navLinks.classList.remove("active");
+});
+
+navItems.forEach(link => {
+    link.addEventListener("click", () => {
+        navLinks.classList.remove("active");
+    });
+});
 
 
 
 
-const counters = document.querySelectorAll(".counter");
-const accolades = document.querySelector(".aboutAccolades");
+const counters = document.querySelectorAll('.counter');
 
-const observer = new IntersectionObserver((entries) => {
+const observer = new IntersectionObserver((entries, observer) => {
 
     entries.forEach(entry => {
 
         if (entry.isIntersecting) {
 
-            // =========================
-            // NUMBER COUNTER
-            // =========================
-
             counters.forEach(counter => {
 
-                const target = Number(counter.dataset.target);
-
+                const target = +counter.dataset.target;
                 let current = 0;
+
+                const duration = 2000; // 2 seconds
+                const increment = target / (duration / 16);
 
                 const updateCounter = () => {
 
-                    const increment = target / 60;
+                    current += increment;
 
                     if (current < target) {
 
-                        current += increment;
-
-                        if (current >= target) {
-                            current = target;
-                        }
-
-                        counter.textContent =
-                            Math.floor(current) +
-                            (target === 98 ? "%" : "");
-
+                        counter.textContent = Math.floor(current).toLocaleString();
                         requestAnimationFrame(updateCounter);
+
+                    } else {
+
+                        counter.textContent = target.toLocaleString();
+
                     }
+
                 };
 
                 updateCounter();
+
             });
 
-
-            // =========================
-            // CIRCLE ANIMATION
-            // =========================
-
-          
-            
-
+            // // Only run the animation once
+            // observer.disconnect();
         }
 
     });
 
 }, {
-    threshold: 0.3
+    threshold: 0.4
+});
+
+observer.observe(document.querySelector('.badge-item'));
+
+
+
+
+ new Swiper('.partners-wrapper', {
+  // Optional parameters
+ 
+  loop: true,
+  spaceBetween: 30,
+
+  // If we need pagination
+  pagination: {
+    el: '.swiper-pagination',
+    clickable:true,
+    dynamicBullets:true
+  },
+
+  // Navigation arrows
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+
+ breakpoints:{
+    0: {
+        slidesPerView:1
+    },
+     768: {
+        slidesPerView:2
+    },
+     1024: {
+      slidesPerView:3
+    }
+ }
+ 
 });
 
 
-observer.observe(accolades);
 
-
-const plusButtons = document.querySelectorAll(".plus");
-
-plusButtons.forEach(button => {
-    button.addEventListener("click", () => {
-        const service = button.closest(".service");
-
-        service.classList.toggle("active");
-    });
-
-})
-
-
-    const serviceItems = document.querySelectorAll(".service-item");
-  
-
-
-    serviceItems.forEach(item => {
-
-        const plus = item.querySelector(".plus");
-        
-
-        plus.addEventListener("click", () => {
-
-            serviceItems.forEach(otherItems => {
-                if (otherItems!== item) {
-                    otherItems.classList.remove('active')
-                }
-            })
-
-            item.classList.toggle("active");
-
-        });
-
-    });
-
-
-
-const fadeElements = document.querySelectorAll(".fade, .fade-down");
-
-
+const fadeSections = document.querySelectorAll('.fade');
 
 const fadeObserver = new IntersectionObserver((entries) => {
 
-    entries.forEach((entry) => {
+    entries.forEach(entry => {
 
         if (entry.isIntersecting) {
-            entry.target.classList.add("show");
 
-            
-        }else{
-            entry.target.classList.remove("show");
+            entry.target.classList.add('show');
+
+        } else {
+
+            entry.target.classList.remove('show');
+
         }
 
     });
@@ -160,95 +156,8 @@ const fadeObserver = new IntersectionObserver((entries) => {
 });
 
 
-fadeElements.forEach((element) => {
-    fadeObserver.observe(element);
+fadeSections.forEach(section => {
+
+    fadeObserver.observe(section);
+
 });
-
-    
-
-
-
-
-
-// const counters = document.querySelectorAll(".counter");
-
-// const observer = new IntersectionObserver((entries, observer) => {
-
-//     entries.forEach(entry => {
-
-//         if (entry.isIntersecting) {
-
-//             const counter = entry.target;
-//             const target = Number(counter.dataset.target);
-
-//             let current = 0;
-
-//             const updateCounter = () => {
-
-//                 const increment = target / 60;
-
-//                 if (current < target) {
-
-//                     current += increment;
-
-//                     if (current >= target) {
-//                         current = target;
-//                     }
-
-//                     counter.textContent =
-//                         Math.floor(current) +
-//                         (target === 98 ? "%" : "");
-
-//                     requestAnimationFrame(updateCounter);
-
-//                 }
-
-//             };
-
-//             updateCounter();
-
-            
-//         }
-
-//     });
-
-// }, {
-//     threshold: 0.5
-// });
-
-// counters.forEach(counter => {
-//     observer.observe(counter);
-// });
-
-
-
-
-// const observer = new IntersectionObserver((entries) => {
-
-//     entries.forEach(entry => {
-
-//         if (entry.isIntersecting) {
-
-//             const circles = document.querySelectorAll(".accolade");
-
-//             circles.forEach(circle => {
-
-//                 // Restart the animation
-//                 circle.classList.remove("animate-circle");
-
-//                 // Force browser to reset animation
-//                 void circle.offsetWidth;
-
-//                 circle.classList.add("animate-circle");
-//             });
-
-//         }
-
-//     });
-
-// }, {
-//     threshold: 0.3
-// });
-
-// observer.observe(accolades);
-
