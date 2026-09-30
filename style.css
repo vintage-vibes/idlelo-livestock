@@ -51,7 +51,7 @@ header {
     position: relative;
     min-height: 100vh;
 
-    background-image: url("images/ban.jpeg");
+    background-image: url("images/idlelo-banner.png");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -1049,12 +1049,35 @@ list-style: none;
     padding: 100px 8%;
 }
 
-.service-container{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 280px));
+.service-body{
+    display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 25px;
-    margin-top: 40px;
+    min-height: 100vh;
+  
+}
+
+.service-wrapper{
+    max-width: 1100px;
+    margin: 0 60px 35px;
+    padding: 20px 10px;
+    
+}
+
+.service-wrapper .swiper-pagination-bullet{
+    height: 13px;
+    width: 13px;
+    opacity: 0.5;
+    background: var(--primary-green);
+}
+
+.service-wrapper .swiper-pagination-bullet-active{
+    opacity: 1;
+}
+
+.service-wrapper .swiper-slide-button{
+    color: var(--primary-green);
+    margin-top: -35px;
 }
 
 .service-content {
@@ -1064,6 +1087,10 @@ list-style: none;
     /* box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); */
      border: 1px solid var(--primary-brown);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-content:active{
+    cursor: grabbing;
 }
 
 .service-content:hover {
@@ -1789,6 +1816,451 @@ opacity: 1;
 
     line-height: 1.7;
 }
+
+/* =========================================
+   PLAN HEADING
+========================================= */
+
+.plan-heading {
+    margin-bottom: 10px;
+}
+
+.plan-heading h3 {
+    margin-bottom: 5px;
+}
+
+.plan-label {
+    color: rgba(255, 255, 255, 0.5);
+
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+
+/* =========================================
+   PLAN BENEFITS
+========================================= */
+
+.plan-benefits {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin: 0 0 25px;
+    padding: 0;
+
+    list-style: none;
+}
+
+.plan-benefits li {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    color: rgba(255, 255, 255, 0.75);
+
+    font-size: 0.75rem;
+}
+
+.plan-benefits li i {
+    width: 18px;
+
+    color: #35b14b;
+
+    font-size: 0.75rem;
+}
+
+
+/* =========================================
+   OPTIONAL BENEFITS
+========================================= */
+
+.cover-extras {
+    margin-top: 70px;
+    margin-bottom: 60px;
+}
+
+
+.extras-heading {
+    margin-bottom: 30px;
+}
+
+
+.section-label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #7fca8c;
+
+    font-size: 0.68rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+
+.extras-heading h3,
+.packs-header h3 {
+    margin: 0 0 10px;
+
+    color: #ffffff;
+
+    font-family: "Merriweather", serif;
+
+    font-size: 1.8rem;
+}
+
+
+.extras-heading p {
+    max-width: 550px;
+
+    margin: 0;
+
+    color: rgba(255,255,255,0.65);
+
+    font-size: 0.85rem;
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   EXTRAS GRID
+========================================= */
+
+.extras-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+
+.extra-card {
+    position: relative;
+
+    padding: 30px;
+
+    background: rgba(255,255,255,0.07);
+
+    border: 1px solid rgba(255,255,255,0.15);
+
+    border-radius: 16px;
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    transition: 0.3s ease;
+}
+
+
+.extra-card:hover {
+    transform: translateY(-5px);
+
+    border-color: rgba(53,177,75,0.6);
+
+    background: rgba(255,255,255,0.1);
+}
+
+
+.extra-number {
+    display: block;
+
+    margin-bottom: 20px;
+
+    color: #7fca8c;
+
+    font-size: 0.65rem;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+}
+
+
+.extra-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 18px;
+
+    background: rgba(53,177,75,0.15);
+
+    color: #35b14b;
+
+    border-radius: 50%;
+}
+
+
+.extra-card h4 {
+    margin-bottom: 12px;
+
+    color: #ffffff;
+
+    font-family: "Merriweather", serif;
+
+    font-size: 1.05rem;
+}
+
+
+.extra-price {
+    margin-bottom: 15px;
+
+    color: rgba(255,255,255,0.6);
+
+    font-size: 0.75rem;
+}
+
+
+.extra-price strong {
+    color: #35b14b;
+
+    font-size: 1.2rem;
+}
+
+
+.extra-card p {
+    margin: 0;
+
+    color: rgba(255,255,255,0.65);
+
+    font-size: 0.78rem;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   COMBINATION PACKS
+========================================= */
+
+.cover-packs {
+    margin-bottom: 60px;
+}
+
+
+.packs-header {
+    margin-bottom: 30px;
+}
+
+
+.packs-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+
+.pack-card {
+    padding: 30px;
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+
+    transition: 0.3s ease;
+}
+
+
+.pack-card:hover {
+    transform: translateY(-5px);
+}
+
+
+.pack-label {
+    display: inline-block;
+
+    margin-bottom: 18px;
+
+    color: #2a8c3c;
+
+    font-size: 0.65rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+
+.pack-card h3 {
+    margin: 0 0 5px;
+
+    color: #172018;
+
+    font-family: "Merriweather", serif;
+
+    font-size: 2rem;
+}
+
+
+.pack-card h3 small {
+    color: #777;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 0.75rem;
+    font-weight: 400;
+}
+
+
+.pack-age {
+    margin: 0;
+
+    color: #777;
+
+    font-size: 0.75rem;
+}
+
+
+.pack-divider {
+    width: 100%;
+    height: 1px;
+
+    margin: 22px 0;
+
+    background: #e5e5e5;
+}
+
+
+.pack-includes strong {
+    color: #172018;
+
+    font-size: 0.75rem;
+}
+
+
+.pack-includes ul {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin: 15px 0 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+
+.pack-includes li {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    color: #555;
+
+    font-size: 0.78rem;
+}
+
+
+.pack-includes li i {
+    width: 18px;
+
+    color: #2a8c3c;
+}
+
+
+/* =========================================
+   WAITING PERIOD
+========================================= */
+
+.cover-waiting {
+    display: flex;
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 45px;
+    padding: 25px 30px;
+
+    background: rgba(255,255,255,0.07);
+
+    border: 1px solid rgba(255,255,255,0.15);
+
+    border-radius: 15px;
+}
+
+
+.waiting-icon {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(53,177,75,0.15);
+
+    color: #35b14b;
+
+    border-radius: 50%;
+}
+
+
+.waiting-content {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.waiting-content strong {
+    color: #ffffff;
+
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+
+.waiting-content span {
+    margin-top: 3px;
+
+    color: #7fca8c;
+
+    font-size: 0.7rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+
+.waiting-content p {
+    margin: 8px 0 0;
+
+    color: rgba(255,255,255,0.6);
+
+    font-size: 0.75rem;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   ASSISTANCE TEXT
+========================================= */
+
+.assistance-content p {
+    margin: 6px 0 0;
+
+    color: #777;
+
+    font-size: 0.75rem;
+}
+
 
 
 /* PRICE */
@@ -2545,7 +3017,7 @@ opacity: 1;
 
 
         .service-content img {
-        height: 160px;
+        height: fit-content;
     }
 
     .service-content h3 {
@@ -2670,6 +3142,15 @@ opacity: 1;
 }
 
 @media (max-width: 768px){  
+
+
+    .service-wrapper{
+        margin: 0 10px 25px;
+    }
+
+    .service-wrapper .swiper-slide-button{
+        display: none;
+    }
 
     .border {
         position: relative;
@@ -2885,6 +3366,22 @@ opacity: 1;
 
 
 @media (max-width: 480px) {
+
+    .packs-grid {
+    display: grid;
+
+    grid-template-columns: repeat(1, 1fr);
+
+    gap: 20px;
+}
+
+    .extras-grid {
+    display: grid;
+
+    grid-template-columns: repeat(1, 1fr);
+
+    gap: 20px;
+}
     .footer-container {
         grid-template-columns: 1fr;
         gap: 10px 20px;
