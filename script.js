@@ -144,20 +144,199 @@ fadeSections.forEach(section => {
 
 
 
+// const planButtons = document.querySelectorAll('.plan-btn');
+// const planInput = document.getElementById('selected-plan');
+
+// planButtons.forEach(button => {
+
+//     button.addEventListener('click', () => {
+
+//         const selectedPlan = button.dataset.plan;
+
+//         planInput.value = selectedPlan;
+
+//     });
+
+// });
+
 const planButtons = document.querySelectorAll('.plan-btn');
-const planInput = document.getElementById('selected-plan');
+const extraButtons = document.querySelectorAll('.extra-btn');
+const packButtons = document.querySelectorAll('.pack-btn');
+
+const summary = document.getElementById('cover-summary');
+const summaryPlan = document.getElementById('summary-plan');
+const summaryExtras = document.getElementById('summary-extras');
+const summaryTotal = document.getElementById('summary-total');
+const selectedPlanInput = document.getElementById('selected-plan');
+
+let selectedPlan = null;
+let selectedExtras = [];
+
+
+
+/* =========================
+   HELPER – go to contact
+========================= */
+function goToContact() {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+/* =========================
+   PLAN BUTTONS
+========================= */
 
 planButtons.forEach(button => {
 
-    button.addEventListener('click', () => {
+    button.addEventListener('click', (e) => {
 
-        const selectedPlan = button.dataset.plan;
+        e.preventDefault();
 
-        planInput.value = selectedPlan;
+        // Remove selected from all plans
+        planButtons.forEach(btn => {
+            btn.classList.remove('selected');
+        });
+
+        // Remove selected from packs
+        packButtons.forEach(btn => {
+            btn.classList.remove('selected');
+        });
+
+        // Select this plan
+        button.classList.add('selected');
+
+        selectedPlan = {
+            name: button.dataset.plan,
+            price: Number(button.dataset.price)
+        };
+
+        updateCoverSummary();
 
     });
 
 });
+
+
+/* =========================
+   PACK BUTTONS
+========================= */
+packButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        packButtons.forEach(btn => btn.classList.remove('selected'));
+        planButtons.forEach(btn => btn.classList.remove('selected'));
+
+        button.classList.add('selected');
+
+        selectedPlan = {
+            name: button.dataset.plan,
+            price: Number(button.dataset.price)
+        };
+
+        // Packs already include benefits → clear extras
+        selectedExtras = [];
+        extraButtons.forEach(btn => btn.classList.remove('selected'));
+
+        updateCoverSummary();
+
+        // Packs are complete → go straight to contact
+        goToContact();
+    });
+});
+
+
+/* =========================
+   EXTRA BUTTONS
+========================= */
+extraButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        e.preventDefault();                         // also stop jump
+
+        const extraName = button.dataset.extra;
+        const extraPrice = Number(button.dataset.price);
+
+        const existingExtra = selectedExtras.find(extra => extra.name === extraName);
+
+        if (existingExtra) {
+            selectedExtras = selectedExtras.filter(extra => extra.name !== extraName);
+            button.classList.remove('selected');
+        } else {
+            selectedExtras.push({ name: extraName, price: extraPrice });
+            button.classList.add('selected');
+        }
+
+        updateCoverSummary();
+        // stay on the page so they can keep adding / choosing a plan
+    });
+});
+
+
+
+
+/* =========================
+   CONFIRMATION PROMPT
+========================= */
+// function askAboutExtrasOrPack() {
+//     // Only show if they haven’t already added extras
+//     if (selectedExtras.length > 0) {
+//         goToContact();
+//         return;
+//     }
+
+//     const wantsExtras = confirm(
+                
+//         "We also have additional options  " +
+//         "Have you considered adding optional benefits (Grocery / Goat or Sheep) " +
+//         "or choosing the Family Pack for better value?\n\n" +
+//         "Click OK to continue to the contact form,\n" +
+//         "or Cancel to stay and add extras / change plan."
+//     );
+
+//     if (wantsExtras) {
+//         goToContact();
+//     }
+//     // if Cancel → stay on the cover section so they can add extras
+// }
+
+
+/* =========================
+   UPDATE SUMMARY
+========================= */
+function updateCoverSummary() {
+    if (!selectedPlan) {
+        summary.classList.remove('show');
+        return;
+    }
+
+    summary.classList.add('show');
+
+    summaryPlan.textContent = `${selectedPlan.name} - R${selectedPlan.price}`;
+
+    if (selectedExtras.length === 0) {
+        summaryExtras.textContent = 'None';
+    } else {
+        summaryExtras.textContent = selectedExtras
+            .map(extra => `${extra.name} (+R${extra.price})`)
+            .join(', ');
+    }
+
+    const extrasTotal = selectedExtras.reduce((total, extra) => total + extra.price, 0);
+    const total = selectedPlan.price + extrasTotal;
+
+    summaryTotal.textContent = `R${total} / month`;
+
+    // Value sent to Formspree
+    selectedPlanInput.value =
+        `${selectedPlan.name} - R${selectedPlan.price}/month` +
+        (selectedExtras.length
+            ? ` | Extras: ${selectedExtras.map(e => e.name).join(', ')} | Total: R${total}/month`
+            : ` | Total: R${total}/month`);
+}
+
+
 
 new Swiper('.service-wrapper', {
   // Optional parameters
@@ -198,7 +377,7 @@ const cattle = [
     id: "IDL-ANG-001",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.1.jpg"
 },
 
@@ -206,7 +385,7 @@ const cattle = [
     id: "IDL-ANG-002",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.2.jpg"
 },
 
@@ -214,7 +393,7 @@ const cattle = [
     id: "IDL-ANG-003",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.3.jpg"
 },
 
@@ -222,7 +401,7 @@ const cattle = [
     id: "IDL-ANG-004",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.4.jpg"
 },
 
@@ -230,7 +409,7 @@ const cattle = [
     id: "IDL-ANG-005",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.5.jpg"
 },
 
@@ -238,7 +417,7 @@ const cattle = [
     id: "IDL-ANG-006",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.6.jpg"
 },
 
@@ -246,7 +425,7 @@ const cattle = [
     id: "IDL-ANG-007",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.7.jpg"
 },
 
@@ -254,7 +433,7 @@ const cattle = [
     id: "IDL-ANG-008",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.8.jpg"
 },
 
@@ -262,7 +441,7 @@ const cattle = [
     id: "IDL-ANG-009",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.9.jpg"
 },
 
@@ -270,7 +449,7 @@ const cattle = [
     id: "IDL-ANG-010",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.10.jpg"
 },
 
@@ -278,7 +457,7 @@ const cattle = [
     id: "IDL-ANG-011",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.11.jpg"
 },
 
@@ -286,7 +465,7 @@ const cattle = [
     id: "IDL-ANG-012",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.12.jpg"
 },
 
@@ -294,7 +473,7 @@ const cattle = [
     id: "IDL-ANG-013",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.13.jpg"
 },
 
@@ -302,7 +481,7 @@ const cattle = [
     id: "IDL-ANG-014",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.14.jpg"
 },
 
@@ -310,7 +489,7 @@ const cattle = [
     id: "IDL-ANG-015",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.15.jpg"
 },
 
@@ -318,7 +497,7 @@ const cattle = [
     id: "IDL-ANG-016",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.16.jpg"
 },
 
@@ -326,7 +505,7 @@ const cattle = [
     id: "IDL-ANG-017",
     name: "Angus Cattle",
     breed: "angus",
-    price: "R12,500",
+    // none:"R12,500",
     image: "images/angus/angus.17.jpg"
 },
 
@@ -334,7 +513,7 @@ const cattle = [
     id: "IDL-BOR-018",
     name: "Boran Cattle",
     breed: "boran",
-    price: "R11,000",
+    // none:"R11,000",
     image: "images/boran/boran.1.jpg"
 },
 
@@ -342,7 +521,7 @@ const cattle = [
     id: "IDL-BOR-019",
     name: "Boran Cattle",
     breed: "boran",
-    price: "R11,000",
+    // none:"R11,000",
     image: "images/boran/boran.2.jpg"
 },
 
@@ -350,7 +529,7 @@ const cattle = [
     id: "IDL-BOR-020",
     name: "Boran Cattle",
     breed: "boran",
-    price: "R11,000",
+    // none:"R11,000",
     image: "images/boran/boran.3.jpg"
 },
 
@@ -358,7 +537,7 @@ const cattle = [
     id: "IDL-BOR-021",
     name: "Boran Cattle",
     breed: "boran",
-    price: "R11,000",
+    // none:"R11,000",
     image: "images/boran/boran.4.jpg"
 },
 
@@ -366,7 +545,7 @@ const cattle = [
     id: "IDL-BOR-022",
     name: "Boran Cattle",
     breed: "boran",
-    price: "R11,000",
+    // none:"R11,000",
     image: "images/boran/boran.5.jpg"
 },
 
@@ -374,7 +553,7 @@ const cattle = [
     id: "IDL-BOR-023",
     name: "Boran Cattle",
     breed: "boran",
-    price: "R11,000",
+    // none:"R11,000",
     image: "images/boran/boran.6.jpg"
 },
 
@@ -382,7 +561,7 @@ const cattle = [
     id: "IDL-BOR-024",
     name: "Boran Cattle",
     breed: "boran",
-    price: "R11,000",
+    // none:"R11,000",
     image: "images/boran/boran.7.jpg"
 },
 
@@ -390,7 +569,7 @@ const cattle = [
     id: "IDL-BOR-025",
     name: "Boran Cattle",
     breed: "boran",
-    price: "R11,000",
+    // none:"R11,000",
     image: "images/boran/boran.8.jpg"
 },
 
@@ -398,7 +577,7 @@ const cattle = [
     id: "IDL-BOR-026",
     name: "Boran Cattle",
     breed: "boran",
-    price: "R11,000",
+    // none:"R11,000",
     image: "images/boran/boran.9.jpg"
 },
 
@@ -406,7 +585,7 @@ const cattle = [
     id: "IDL-BOR-027",
     name: "Boran Cattle",
     breed: "boran",
-    price: "R11,000",
+    // none:"R11,000",
     image: "images/boran/boran.10.jpg"
 },
 
@@ -414,7 +593,7 @@ const cattle = [
     id: "IDL-BOR-028",
     name: "Boran Cattle",
     breed: "boran",
-    price: "R11,000",
+    // none:"R11,000",
     image: "images/boran/boran.11.jpg"
 },
 
@@ -422,7 +601,7 @@ const cattle = [
     id: "IDL-BOR-029",
     name: "Boran Cattle",
     breed: "boran",
-    price: "R11,000",
+    // none:"R11,000",
     image: "images/boran/boran.12.jpg"
 },
 
@@ -430,7 +609,7 @@ const cattle = [
     id: "IDL-BOR-030",
     name: "Boran Cattle",
     breed: "boran",
-    price: "R11,000",
+    // none:"R11,000",
     image: "images/boran/boran.13.jpg"
 },
 
@@ -438,7 +617,7 @@ const cattle = [
     id: "IDL-BOR-031",
     name: "Boran Cattle",
     breed: "boran",
-    price: "R11,000",
+    // none:"R11,000",
     image: "images/boran/boran.14.jpg"
 },
 
@@ -446,7 +625,7 @@ const cattle = [
     id: "IDL-BOR-032",
     name: "Boran Cattle",
     breed: "boran",
-    price: "R11,000",
+    // none:"R11,000",
     image: "images/boran/boran.15.jpg"
 },
 
@@ -454,7 +633,7 @@ const cattle = [
     id: "IDL-BOR-033",
     name: "Boran Cattle",
     breed: "boran",
-    price: "R11,000",
+    // none:"R11,000",
     image: "images/boran/boran.16.jpg"
 },
 
@@ -462,7 +641,7 @@ const cattle = [
     id: "IDL-NGU-034",
     name: "Nguni Cattle",
     breed: "nguni",
-    price: "R9,500",
+    // // none:"R9,500",
     image: "images/nguni/nguni.1.jpg"
 },
 
@@ -470,7 +649,7 @@ const cattle = [
 //     id: "IDL-NGU-035",
 //     name: "Nguni Cattle",
 //     breed: "nguni",
-//     price: "R9,500",
+//     // none:"R9,500",
 //     image: "images/nguni/nguni.2.jpg"
 // },
 
@@ -478,7 +657,7 @@ const cattle = [
     id: "IDL-NGU-036",
     name: "Nguni Cattle",
     breed: "nguni",
-    price: "R9,500",
+    // // none:"R9,500",
     image: "images/nguni/nguni.3.jpg"
 },
 
@@ -486,7 +665,7 @@ const cattle = [
     id: "IDL-NGU-037",
     name: "Nguni Cattle",
     breed: "nguni",
-    price: "R9,500",
+    // none:"R9,500",
     image: "images/nguni/nguni.4.jpg"
 },
 
@@ -494,7 +673,7 @@ const cattle = [
     id: "IDL-NGU-038",
     name: "Nguni Cattle",
     breed: "nguni",
-    price: "R9,500",
+    // none:"R9,500",
     image: "images/nguni/nguni.5.jpg"
 },
 
@@ -502,7 +681,7 @@ const cattle = [
     id: "IDL-NGU-039",
     name: "Nguni Cattle",
     breed: "nguni",
-    price: "R9,500",
+    // none:"R9,500",
     image: "images/nguni/nguni.6.jpg"
 },
 
@@ -510,7 +689,7 @@ const cattle = [
     id: "IDL-BRA-040",
     name: "Brahman Cattle",
     breed: "brahman",
-    price: "R8,000",
+    // none:"R8,000",
     image: "images/brahman/brahman.1.jpg"
 },
 
@@ -518,7 +697,7 @@ const cattle = [
     id: "IDL-BRA-041",
     name: "Brahman Cattle",
     breed: "brahman",
-    price: "R8,000",
+    // none:"R8,000",
     image: "images/brahman/brahman.2.jpg"
 },
 
@@ -526,7 +705,7 @@ const cattle = [
     id: "IDL-BRA-042",
     name: "Brahman Cattle",
     breed: "brahman",
-    price: "R8,000",
+    // none:"R8,000",
     image: "images/brahman/brahman.3.jpg"
 },
 
@@ -534,7 +713,7 @@ const cattle = [
     id: "IDL-BRA-043",
     name: "Brahman Cattle",
     breed: "brahman",
-    price: "R8,000",
+    // none:"R8,000",
     image: "images/brahman/brahman.4.jpg"
 },
 
@@ -542,7 +721,7 @@ const cattle = [
     id: "IDL-BRA-044",
     name: "Brahman Cattle",
     breed: "brahman",
-    price: "R8,000",
+    // none:"R8,000",
     image: "images/brahman/brahman.5.jpg"
 },
 
@@ -550,7 +729,7 @@ const cattle = [
     id: "IDL-BRA-045",
     name: "Brahman Cattle",
     breed: "brahman",
-    price: "R8,000",
+    // none:"R8,000",
     image: "images/brahman/brahman.6.jpg"
 },
 
@@ -558,7 +737,7 @@ const cattle = [
     id: "IDL-BRA-046",
     name: "Brahman Cattle",
     breed: "brahman",
-    price: "R8,000",
+    // none:"R8,000",
     image: "images/brahman/brahman.7.jpg"
 },
 
@@ -566,7 +745,7 @@ const cattle = [
     id: "IDL-BRA-047",
     name: "Brahman Cattle",
     breed: "brahman",
-    price: "R8,000",
+    // none:"R8,000",
     image: "images/brahman/brahman.8.jpg"
 },
 
@@ -574,7 +753,7 @@ const cattle = [
     id: "IDL-BRA-048",
     name: "Brahman Cattle",
     breed: "brahman",
-    price: "R8,000",
+    // none:"R8,000",
     image: "images/brahman/brahman.9.jpg"
 },
 
@@ -582,7 +761,7 @@ const cattle = [
     id: "IDL-BRA-049",
     name: "Brahman Cattle",
     breed: "brahman",
-    price: "R8,000",
+    // none:"R8,000",
     image: "images/brahman/brahman.10.jpg"
 },
 
@@ -594,7 +773,7 @@ const cattle = [
 //     id: "IDL-ANG-050",
 //     name: "Angus Cattle",
 //     breed: "angus",
-//     price: "R12,500",
+//     none:"R12,500",
 //     image: "images/angus.jpeg"
 // },
 
@@ -602,7 +781,7 @@ const cattle = [
 //     id: "IDL-NGU-051",
 //     name: "Nguni Cattle",
 //     breed: "nguni",
-//     price: "R9,500",
+//     // none:"R9,500",
 //     image: "images/nguni.jpeg"
 // },
 
@@ -610,7 +789,7 @@ const cattle = [
 //     id: "IDL-NGU-052",
 //     name: "Nguni Cattle",
 //     breed: "nguni",
-//     price: "R9,500",
+//     // none:"R9,500",
 //     image: "images/nguni.jpeg"
 // },
 
@@ -618,7 +797,7 @@ const cattle = [
 //     id: "IDL-BOR-053",
 //     name: "Boran Cattle",
 //     breed: "boran",
-//     price: "R11,000",
+//     none:"R11,000",
 //     image: "images/boran.jpeg"
 // },
 
@@ -626,7 +805,7 @@ const cattle = [
 //     id: "IDL-BOR-054",
 //     name: "Boran Cattle",
 //     breed: "boran",
-//     price: "R11,000",
+//     none:"R11,000",
 //     image: "images/boran.jpeg"
 // },
 
@@ -634,7 +813,7 @@ const cattle = [
 //     id: "IDL-BRA-055",
 //     name: "Brahman Cattle",
 //     breed: "brahman",
-//     price: "R8,000",
+//     // none:"R8,000",
 //     image: "images/brahman.jpeg"
 // },
 
@@ -642,7 +821,7 @@ const cattle = [
 //     id: "IDL-BRA-056",
 //     name: "Brahman Cattle",
 //     breed: "brahman",
-//     price: "R8,000",
+//     // none:"R8,000",
 //     image: "images/brahman.jpeg"
 // },
 
@@ -650,7 +829,7 @@ const cattle = [
 //     id: "IDL-ANG-057",
 //     name: "Angus Cattle",
 //     breed: "angus",
-//     price: "R12,500",
+//     none:"R12,500",
 //     image: "images/angus.jpeg"
 // },
 
@@ -658,7 +837,7 @@ const cattle = [
 //     id: "IDL-ANG-058",
 //     name: "Angus Cattle",
 //     breed: "angus",
-//     price: "R12,500",
+//     none:"R12,500",
 //     image: "images/angus.jpeg"
 // },
 
@@ -666,7 +845,7 @@ const cattle = [
 //     id: "IDL-NGU-059",
 //     name: "Nguni Cattle",
 //     breed: "nguni",
-//     price: "R9,500",
+//     // none:"R9,500",
 //     image: "images/nguni.jpeg"
 // },
 
@@ -674,7 +853,7 @@ const cattle = [
 //     id: "IDL-NGU-060",
 //     name: "Nguni Cattle",
 //     breed: "nguni",
-//     price: "R9,500",
+//     // none:"R9,500",
 //     image: "images/nguni.jpeg"
 // },
 
@@ -682,7 +861,7 @@ const cattle = [
 //     id: "IDL-BOR-061",
 //     name: "Boran Cattle",
 //     breed: "boran",
-//     price: "R11,000",
+//     none:"R11,000",
 //     image: "images/boran.jpeg"
 // },
 
@@ -690,7 +869,7 @@ const cattle = [
 //     id: "IDL-BOR-062",
 //     name: "Boran Cattle",
 //     breed: "boran",
-//     price: "R11,000",
+//     none:"R11,000",
 //     image: "images/boran.jpeg"
 // },
 
@@ -698,7 +877,7 @@ const cattle = [
 //     id: "IDL-BRA-063",
 //     name: "Brahman Cattle",
 //     breed: "brahman",
-//     price: "R8,000",
+//     // none:"R8,000",
 //     image: "images/brahman.jpeg"
 // },
 
@@ -706,7 +885,7 @@ const cattle = [
 //     id: "IDL-BRA-064",
 //     name: "Brahman Cattle",
 //     breed: "brahman",
-//     price: "R8,000",
+//     // none:"R8,000",
 //     image: "images/brahman.jpeg"
 // },
 
@@ -714,7 +893,7 @@ const cattle = [
 //     id: "IDL-ANG-065",
 //     name: "Angus Cattle",
 //     breed: "angus",
-//     price: "R12,500",
+//     none:"R12,500",
 //     image: "images/angus.jpeg"
 // },
 
@@ -722,7 +901,7 @@ const cattle = [
 //     id: "IDL-ANG-066",
 //     name: "Angus Cattle",
 //     breed: "angus",
-//     price: "R12,500",
+//     none:"R12,500",
 //     image: "images/angus.jpeg"
 // },
 
@@ -730,7 +909,7 @@ const cattle = [
 //     id: "IDL-NGU-067",
 //     name: "Nguni Cattle",
 //     breed: "nguni",
-//     price: "R9,500",
+//     // none:"R9,500",
 //     image: "images/nguni.jpeg"
 // },
 
@@ -738,7 +917,7 @@ const cattle = [
 //     id: "IDL-NGU-068",
 //     name: "Nguni Cattle",
 //     breed: "nguni",
-//     price: "R9,500",
+//     // none:"R9,500",
 //     image: "images/nguni.jpeg"
 // },
 
@@ -746,7 +925,7 @@ const cattle = [
 //     id: "IDL-BOR-069",
 //     name: "Boran Cattle",
 //     breed: "boran",
-//     price: "R11,000",
+//     none:"R11,000",
 //     image: "images/boran.jpeg"
 // },
 
@@ -754,7 +933,7 @@ const cattle = [
 //     id: "IDL-BOR-070",
 //     name: "Boran Cattle",
 //     breed: "boran",
-//     price: "R11,000",
+//     none:"R11,000",
 //     image: "images/boran.jpeg"
 // },
 ];
@@ -786,7 +965,7 @@ function displayCattle(cattleToDisplay) {
             <h3>${cow.name}</h3>
 
             <p class="service-content-price">
-                ${cow.price}
+              
             </p>
 
             <a 
@@ -840,3 +1019,20 @@ filterButtons.forEach(button => {
 
 
 displayCattle(cattle);
+
+
+
+const aboutToggle = document.querySelector('#aboutToggle');
+const aboutMore = document.querySelector('#aboutMore');
+
+aboutToggle.addEventListener('click', () => {
+
+    aboutMore.classList.toggle('show');
+
+    if (aboutMore.classList.contains('show')) {
+        aboutToggle.textContent = 'Show Less';
+    } else {
+        aboutToggle.textContent = 'Learn More';
+    }
+
+});
