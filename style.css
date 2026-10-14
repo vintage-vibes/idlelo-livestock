@@ -1684,8 +1684,8 @@ header::after {
 ========================= */
 
 .combo-wrapper{
-    max-width: 1100px;
-    margin: 0 60px 35px;
+    max-width: 1200px;
+    margin: 0 10px 35px;
     padding: 20px 10px;
 }
 
@@ -1709,6 +1709,7 @@ header::after {
 
 .combo-card {
     position: relative;
+   
 
     padding: 25px;
 
@@ -4192,14 +4193,14 @@ color: var(--light);
 
 
 .contact{
-    padding: 100px 10%;
+    padding: 100px 5%;
     background: #f8f8f5;
 }
 
 .contact-container {
     display: grid;
-    grid-template-columns: 0.9fr 1.1fr;
-    gap: clamp(35px, 5vw, 75px);
+    grid-template-columns: 0.7fr 1.2fr;
+    gap: 2em;
     align-items: start;
 
     width: 100%;
@@ -4320,6 +4321,9 @@ color: var(--light);
     width: fit-content;
     max-width: 100%;
 
+
+   
+
     color: var(--primary-brown);
     font-size: 0.95rem;
     font-weight: 700;
@@ -4337,6 +4341,11 @@ color: var(--light);
 /* ========================================
    CONTACT FORM
 ======================================== */
+
+form{
+    justify-content: center;
+    align-self: center;
+}
 
 .contact-form {
     position: relative;
@@ -4664,13 +4673,13 @@ color: var(--light);
 
 
       .contact{
-        padding: 70px 6%;
+        padding: 70px 3%;
     }
 
       .contact-container {
         grid-template-columns: 1fr;
         gap: 35px;
-        max-width: 700px;
+        /* max-width: 1200px; */
         margin-top: 40px;
     }
 
@@ -4902,6 +4911,10 @@ color: var(--light);
 }
 
 @media (max-width: 768px){  
+
+    .contact-item a {
+        margin: 0 auto;
+    }
 
     .whatsapp-float {
         width: 54px;
