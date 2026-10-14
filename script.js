@@ -1,132 +1,156 @@
+const menuToggle = document.querySelector(".icon-menu");
+const sidebar = document.querySelector(".sidebar");
+const closeSidebar = document.querySelector(".close-sidebar");
 
 
+ 
 
-const burgerMenu = document.querySelector(".burger-menu");
-const navLinks = document.querySelector(".nav-links");
-const closeBtn = document.querySelector(".close-btn");
-const navItems = document.querySelectorAll(".nav-links a");
+menuToggle.addEventListener("click", function (event) {
 
-burgerMenu.addEventListener("click", () => {
-    navLinks.classList.add("active");
+    event.preventDefault();
+
+    sidebar.classList.toggle("active");
 });
 
-closeBtn.addEventListener("click", () => {
-    navLinks.classList.remove("active");
+closeSidebar.addEventListener("click", function (event) {
+
+    event.preventDefault();
+
+    sidebar.classList.remove("active");
+
 });
 
-navItems.forEach(link => {
-    link.addEventListener("click", () => {
-        navLinks.classList.remove("active");
-    });
-});
+const navlinks = document.querySelectorAll(".sidebar a")
+
+  navlinks.forEach(link=> {
+         link.addEventListener('click',()=>{
+          
+        navlinks.forEach(otherlink => {
+
+            if (otherlink !== link ) {
+                sidebar.classList.remove('active')
+            }
+        });
+        link.classList.add('active');
+    })
+ });
 
 
 
 
-const counters = document.querySelectorAll('.counter');
+const counters = document.querySelectorAll(".counter");
+const accolades = document.querySelector(".aboutAccolades");
 
-const observer = new IntersectionObserver((entries, observer) => {
+const observer = new IntersectionObserver((entries) => {
 
     entries.forEach(entry => {
 
         if (entry.isIntersecting) {
 
+            // =========================
+            // NUMBER COUNTER
+            // =========================
+
             counters.forEach(counter => {
 
-                const target = +counter.dataset.target;
-                let current = 0;
+                const target = Number(counter.dataset.target);
 
-                const duration = 2000; // 2 seconds
-                const increment = target / (duration / 16);
+                let current = 0;
 
                 const updateCounter = () => {
 
-                    current += increment;
+                    const increment = target / 60;
 
                     if (current < target) {
 
-                        counter.textContent = Math.floor(current).toLocaleString();
+                        current += increment;
+
+                        if (current >= target) {
+                            current = target;
+                        }
+
+                        counter.textContent =
+                            Math.floor(current) +
+                            (target === 98 ? "%" : "");
+
                         requestAnimationFrame(updateCounter);
-
-                    } else {
-
-                        counter.textContent = target.toLocaleString();
-
                     }
-
                 };
 
                 updateCounter();
-
             });
 
-            // // Only run the animation once
-            // observer.disconnect();
+
+            // =========================
+            // CIRCLE ANIMATION
+            // =========================
+
+          
+            
+
         }
 
     });
 
 }, {
-    threshold: 0.4
-});
-
-observer.observe(document.querySelector('.badge-item'));
-
-
-
-
-
-
-
- new Swiper('.partners-wrapper', {
-  // Optional parameters
- 
-  loop: true,
-  spaceBetween: 30,
-
-  // If we need pagination
-  pagination: {
-    el: '.swiper-pagination',
-    clickable:true,
-    dynamicBullets:true
-  },
-
-  // Navigation arrows
-  navigation: {
-    nextEl: '.swiper-button-next',
-    prevEl: '.swiper-button-prev',
-  },
-
- breakpoints:{
-    0: {
-        slidesPerView:1
-    },
-     768: {
-        slidesPerView:2
-    },
-     1024: {
-      slidesPerView:3
-    }
- }
- 
+    threshold: 0.3
 });
 
 
+observer.observe(accolades);
 
-const fadeSections = document.querySelectorAll('.fade');
+
+const plusButtons = document.querySelectorAll(".plus");
+
+plusButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        const service = button.closest(".service");
+
+        service.classList.toggle("active");
+    });
+
+})
+
+
+    const serviceItems = document.querySelectorAll(".service-item");
+  
+
+
+    serviceItems.forEach(item => {
+
+        const plus = item.querySelector(".plus");
+        
+
+        plus.addEventListener("click", () => {
+
+            serviceItems.forEach(otherItems => {
+                if (otherItems!== item) {
+                    otherItems.classList.remove('active')
+                }
+            })
+
+            item.classList.toggle("active");
+
+        });
+
+    });
+
+
+
+const fadeElements = document.querySelectorAll(".fade, .fade-down");
+
+
 
 const fadeObserver = new IntersectionObserver((entries) => {
 
-    entries.forEach(entry => {
+    entries.forEach((entry) => {
 
         if (entry.isIntersecting) {
+            entry.target.classList.add("show");
 
-            entry.target.classList.add('show');
-
-        } else {
-
-            entry.target.classList.remove('show');
-
+            
+        }else{
+            entry.target.classList.remove("show");
         }
 
     });
@@ -136,903 +160,110 @@ const fadeObserver = new IntersectionObserver((entries) => {
 });
 
 
-fadeSections.forEach(section => {
-
-    fadeObserver.observe(section);
-
+fadeElements.forEach((element) => {
+    fadeObserver.observe(element);
 });
 
+    
 
 
-// const planButtons = document.querySelectorAll('.plan-btn');
-// const planInput = document.getElementById('selected-plan');
 
-// planButtons.forEach(button => {
 
-//     button.addEventListener('click', () => {
 
-//         const selectedPlan = button.dataset.plan;
+// const counters = document.querySelectorAll(".counter");
 
-//         planInput.value = selectedPlan;
+// const observer = new IntersectionObserver((entries, observer) => {
+
+//     entries.forEach(entry => {
+
+//         if (entry.isIntersecting) {
+
+//             const counter = entry.target;
+//             const target = Number(counter.dataset.target);
+
+//             let current = 0;
+
+//             const updateCounter = () => {
+
+//                 const increment = target / 60;
+
+//                 if (current < target) {
+
+//                     current += increment;
+
+//                     if (current >= target) {
+//                         current = target;
+//                     }
+
+//                     counter.textContent =
+//                         Math.floor(current) +
+//                         (target === 98 ? "%" : "");
+
+//                     requestAnimationFrame(updateCounter);
+
+//                 }
+
+//             };
+
+//             updateCounter();
+
+            
+//         }
 
 //     });
 
+// }, {
+//     threshold: 0.5
 // });
 
-const planButtons = document.querySelectorAll('.plan-btn');
-const extraButtons = document.querySelectorAll('.extra-btn');
-const packButtons = document.querySelectorAll('.pack-btn');
-
-const summary = document.getElementById('cover-summary');
-const summaryPlan = document.getElementById('summary-plan');
-const summaryExtras = document.getElementById('summary-extras');
-const summaryTotal = document.getElementById('summary-total');
-const selectedPlanInput = document.getElementById('selected-plan');
-
-let selectedPlan = null;
-let selectedExtras = [];
-
-
-
-/* =========================
-   HELPER – go to contact
-========================= */
-function goToContact() {
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-        contactSection.scrollIntoView({ behavior: 'smooth' });
-    }
-}
-
-/* =========================
-   PLAN BUTTONS
-========================= */
-
-planButtons.forEach(button => {
-
-    button.addEventListener('click', (e) => {
-
-        e.preventDefault();
-
-        // Remove selected from all plans
-        planButtons.forEach(btn => {
-            btn.classList.remove('selected');
-        });
-
-        // Remove selected from packs
-        packButtons.forEach(btn => {
-            btn.classList.remove('selected');
-        });
-
-        // Select this plan
-        button.classList.add('selected');
-
-        selectedPlan = {
-            name: button.dataset.plan,
-            price: Number(button.dataset.price)
-        };
-
-        updateCoverSummary();
-
-    });
-
-});
-
-
-/* =========================
-   PACK BUTTONS
-========================= */
-packButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-        e.preventDefault();
-
-        packButtons.forEach(btn => btn.classList.remove('selected'));
-        planButtons.forEach(btn => btn.classList.remove('selected'));
-
-        button.classList.add('selected');
-
-        selectedPlan = {
-            name: button.dataset.plan,
-            price: Number(button.dataset.price)
-        };
-
-        // Packs already include benefits → clear extras
-        selectedExtras = [];
-        extraButtons.forEach(btn => btn.classList.remove('selected'));
-
-        updateCoverSummary();
-
-        // Packs are complete → go straight to contact
-        goToContact();
-    });
-});
-
-
-/* =========================
-   EXTRA BUTTONS
-========================= */
-extraButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-        e.preventDefault();                         // also stop jump
-
-        const extraName = button.dataset.extra;
-        const extraPrice = Number(button.dataset.price);
-
-        const existingExtra = selectedExtras.find(extra => extra.name === extraName);
-
-        if (existingExtra) {
-            selectedExtras = selectedExtras.filter(extra => extra.name !== extraName);
-            button.classList.remove('selected');
-        } else {
-            selectedExtras.push({ name: extraName, price: extraPrice });
-            button.classList.add('selected');
-        }
-
-        updateCoverSummary();
-        // stay on the page so they can keep adding / choosing a plan
-    });
-});
+// counters.forEach(counter => {
+//     observer.observe(counter);
+// });
 
 
 
 
-/* =========================
-   CONFIRMATION PROMPT
-========================= */
-// function askAboutExtrasOrPack() {
-//     // Only show if they haven’t already added extras
-//     if (selectedExtras.length > 0) {
-//         goToContact();
-//         return;
-//     }
+// const observer = new IntersectionObserver((entries) => {
 
-//     const wantsExtras = confirm(
-                
-//         "We also have additional options  " +
-//         "Have you considered adding optional benefits (Grocery / Goat or Sheep) " +
-//         "or choosing the Family Pack for better value?\n\n" +
-//         "Click OK to continue to the contact form,\n" +
-//         "or Cancel to stay and add extras / change plan."
-//     );
+//     entries.forEach(entry => {
 
-//     if (wantsExtras) {
-//         goToContact();
-//     }
-//     // if Cancel → stay on the cover section so they can add extras
-// }
+//         if (entry.isIntersecting) {
+
+//             const circles = document.querySelectorAll(".accolade");
+
+//             circles.forEach(circle => {
+
+//                 // Restart the animation
+//                 circle.classList.remove("animate-circle");
+
+//                 // Force browser to reset animation
+//                 void circle.offsetWidth;
+
+//                 circle.classList.add("animate-circle");
+//             });
+
+//         }
+
+//     });
+
+// }, {
+//     threshold: 0.3
+// });
+
+// observer.observe(accolades);
 
 
-/* =========================
-   UPDATE SUMMARY
-========================= */
-function updateCoverSummary() {
-    if (!selectedPlan) {
-        summary.classList.remove('show');
-        return;
-    }
+const storyMore = document.querySelector('.story-more');
+const storyMoreBtn = document.querySelector('#storyMoreBtn');
 
-    summary.classList.add('show');
+storyMoreBtn.addEventListener('click', () => {
 
-    summaryPlan.textContent = `${selectedPlan.name} - R${selectedPlan.price}`;
+    storyMore.classList.toggle('show');
 
-    if (selectedExtras.length === 0) {
-        summaryExtras.textContent = 'None';
+    if (storyMore.classList.contains('show')) {
+        storyMoreBtn.textContent = 'Read Less';
     } else {
-        summaryExtras.textContent = selectedExtras
-            .map(extra => `${extra.name} (+R${extra.price})`)
-            .join(', ');
-    }
-
-    const extrasTotal = selectedExtras.reduce((total, extra) => total + extra.price, 0);
-    const total = selectedPlan.price + extrasTotal;
-
-    summaryTotal.textContent = `R${total} / month`;
-
-    // Value sent to Formspree
-    selectedPlanInput.value =
-        `${selectedPlan.name} - R${selectedPlan.price}/month` +
-        (selectedExtras.length
-            ? ` | Extras: ${selectedExtras.map(e => e.name).join(', ')} | Total: R${total}/month`
-            : ` | Total: R${total}/month`);
-}
-
-
-
-new Swiper('.service-wrapper', {
-  // Optional parameters
- 
-  loop: true,
-  spaceBetween: 30,
-
-  // If we need pagination
-  pagination: {
-    el: '.swiper-pagination',
-    clickable:true,
-    dynamicBullets:true
-  },
-
-  // Navigation arrows
-  navigation: {
-    nextEl: '.swiper-button-next',
-    prevEl: '.swiper-button-prev',
-  },
-
- breakpoints:{
-    0: {
-        slidesPerView:1
-    },
-     768: {
-        slidesPerView:2
-    },
-     1024: {
-      slidesPerView:3
-    }
- }
- 
-});
-
-const cattle = [
-  
-{
-    id: "IDL-ANG-001",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.1.jpg"
-},
-
-{
-    id: "IDL-ANG-002",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.2.jpg"
-},
-
-{
-    id: "IDL-ANG-003",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.3.jpg"
-},
-
-{
-    id: "IDL-ANG-004",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.4.jpg"
-},
-
-{
-    id: "IDL-ANG-005",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.5.jpg"
-},
-
-{
-    id: "IDL-ANG-006",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.6.jpg"
-},
-
-{
-    id: "IDL-ANG-007",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.7.jpg"
-},
-
-{
-    id: "IDL-ANG-008",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.8.jpg"
-},
-
-{
-    id: "IDL-ANG-009",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.9.jpg"
-},
-
-{
-    id: "IDL-ANG-010",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.10.jpg"
-},
-
-{
-    id: "IDL-ANG-011",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.11.jpg"
-},
-
-{
-    id: "IDL-ANG-012",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.12.jpg"
-},
-
-{
-    id: "IDL-ANG-013",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.13.jpg"
-},
-
-{
-    id: "IDL-ANG-014",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.14.jpg"
-},
-
-{
-    id: "IDL-ANG-015",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.15.jpg"
-},
-
-{
-    id: "IDL-ANG-016",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.16.jpg"
-},
-
-{
-    id: "IDL-ANG-017",
-    name: "Angus Cattle",
-    breed: "angus",
-    // none:"R12,500",
-    image: "images/angus/angus.17.jpg"
-},
-
-{
-    id: "IDL-BOR-018",
-    name: "Boran Cattle",
-    breed: "boran",
-    // none:"R11,000",
-    image: "images/boran/boran.1.jpg"
-},
-
-{
-    id: "IDL-BOR-019",
-    name: "Boran Cattle",
-    breed: "boran",
-    // none:"R11,000",
-    image: "images/boran/boran.2.jpg"
-},
-
-{
-    id: "IDL-BOR-020",
-    name: "Boran Cattle",
-    breed: "boran",
-    // none:"R11,000",
-    image: "images/boran/boran.3.jpg"
-},
-
-{
-    id: "IDL-BOR-021",
-    name: "Boran Cattle",
-    breed: "boran",
-    // none:"R11,000",
-    image: "images/boran/boran.4.jpg"
-},
-
-{
-    id: "IDL-BOR-022",
-    name: "Boran Cattle",
-    breed: "boran",
-    // none:"R11,000",
-    image: "images/boran/boran.5.jpg"
-},
-
-{
-    id: "IDL-BOR-023",
-    name: "Boran Cattle",
-    breed: "boran",
-    // none:"R11,000",
-    image: "images/boran/boran.6.jpg"
-},
-
-{
-    id: "IDL-BOR-024",
-    name: "Boran Cattle",
-    breed: "boran",
-    // none:"R11,000",
-    image: "images/boran/boran.7.jpg"
-},
-
-{
-    id: "IDL-BOR-025",
-    name: "Boran Cattle",
-    breed: "boran",
-    // none:"R11,000",
-    image: "images/boran/boran.8.jpg"
-},
-
-{
-    id: "IDL-BOR-026",
-    name: "Boran Cattle",
-    breed: "boran",
-    // none:"R11,000",
-    image: "images/boran/boran.9.jpg"
-},
-
-{
-    id: "IDL-BOR-027",
-    name: "Boran Cattle",
-    breed: "boran",
-    // none:"R11,000",
-    image: "images/boran/boran.10.jpg"
-},
-
-{
-    id: "IDL-BOR-028",
-    name: "Boran Cattle",
-    breed: "boran",
-    // none:"R11,000",
-    image: "images/boran/boran.11.jpg"
-},
-
-{
-    id: "IDL-BOR-029",
-    name: "Boran Cattle",
-    breed: "boran",
-    // none:"R11,000",
-    image: "images/boran/boran.12.jpg"
-},
-
-{
-    id: "IDL-BOR-030",
-    name: "Boran Cattle",
-    breed: "boran",
-    // none:"R11,000",
-    image: "images/boran/boran.13.jpg"
-},
-
-{
-    id: "IDL-BOR-031",
-    name: "Boran Cattle",
-    breed: "boran",
-    // none:"R11,000",
-    image: "images/boran/boran.14.jpg"
-},
-
-{
-    id: "IDL-BOR-032",
-    name: "Boran Cattle",
-    breed: "boran",
-    // none:"R11,000",
-    image: "images/boran/boran.15.jpg"
-},
-
-{
-    id: "IDL-BOR-033",
-    name: "Boran Cattle",
-    breed: "boran",
-    // none:"R11,000",
-    image: "images/boran/boran.16.jpg"
-},
-
-{
-    id: "IDL-NGU-034",
-    name: "Nguni Cattle",
-    breed: "nguni",
-    // // none:"R9,500",
-    image: "images/nguni/nguni.1.jpg"
-},
-
-// {
-//     id: "IDL-NGU-035",
-//     name: "Nguni Cattle",
-//     breed: "nguni",
-//     // none:"R9,500",
-//     image: "images/nguni/nguni.2.jpg"
-// },
-
-{
-    id: "IDL-NGU-036",
-    name: "Nguni Cattle",
-    breed: "nguni",
-    // // none:"R9,500",
-    image: "images/nguni/nguni.3.jpg"
-},
-
-{
-    id: "IDL-NGU-037",
-    name: "Nguni Cattle",
-    breed: "nguni",
-    // none:"R9,500",
-    image: "images/nguni/nguni.4.jpg"
-},
-
-{
-    id: "IDL-NGU-038",
-    name: "Nguni Cattle",
-    breed: "nguni",
-    // none:"R9,500",
-    image: "images/nguni/nguni.5.jpg"
-},
-
-{
-    id: "IDL-NGU-039",
-    name: "Nguni Cattle",
-    breed: "nguni",
-    // none:"R9,500",
-    image: "images/nguni/nguni.6.jpg"
-},
-
-{
-    id: "IDL-BRA-040",
-    name: "Brahman Cattle",
-    breed: "brahman",
-    // none:"R8,000",
-    image: "images/brahman/brahman.1.jpg"
-},
-
-{
-    id: "IDL-BRA-041",
-    name: "Brahman Cattle",
-    breed: "brahman",
-    // none:"R8,000",
-    image: "images/brahman/brahman.2.jpg"
-},
-
-{
-    id: "IDL-BRA-042",
-    name: "Brahman Cattle",
-    breed: "brahman",
-    // none:"R8,000",
-    image: "images/brahman/brahman.3.jpg"
-},
-
-{
-    id: "IDL-BRA-043",
-    name: "Brahman Cattle",
-    breed: "brahman",
-    // none:"R8,000",
-    image: "images/brahman/brahman.4.jpg"
-},
-
-{
-    id: "IDL-BRA-044",
-    name: "Brahman Cattle",
-    breed: "brahman",
-    // none:"R8,000",
-    image: "images/brahman/brahman.5.jpg"
-},
-
-{
-    id: "IDL-BRA-045",
-    name: "Brahman Cattle",
-    breed: "brahman",
-    // none:"R8,000",
-    image: "images/brahman/brahman.6.jpg"
-},
-
-{
-    id: "IDL-BRA-046",
-    name: "Brahman Cattle",
-    breed: "brahman",
-    // none:"R8,000",
-    image: "images/brahman/brahman.7.jpg"
-},
-
-{
-    id: "IDL-BRA-047",
-    name: "Brahman Cattle",
-    breed: "brahman",
-    // none:"R8,000",
-    image: "images/brahman/brahman.8.jpg"
-},
-
-{
-    id: "IDL-BRA-048",
-    name: "Brahman Cattle",
-    breed: "brahman",
-    // none:"R8,000",
-    image: "images/brahman/brahman.9.jpg"
-},
-
-{
-    id: "IDL-BRA-049",
-    name: "Brahman Cattle",
-    breed: "brahman",
-    // none:"R8,000",
-    image: "images/brahman/brahman.10.jpg"
-},
-
-
-
-
-
-// {
-//     id: "IDL-ANG-050",
-//     name: "Angus Cattle",
-//     breed: "angus",
-//     none:"R12,500",
-//     image: "images/angus.jpeg"
-// },
-
-// {
-//     id: "IDL-NGU-051",
-//     name: "Nguni Cattle",
-//     breed: "nguni",
-//     // none:"R9,500",
-//     image: "images/nguni.jpeg"
-// },
-
-// {
-//     id: "IDL-NGU-052",
-//     name: "Nguni Cattle",
-//     breed: "nguni",
-//     // none:"R9,500",
-//     image: "images/nguni.jpeg"
-// },
-
-// {
-//     id: "IDL-BOR-053",
-//     name: "Boran Cattle",
-//     breed: "boran",
-//     none:"R11,000",
-//     image: "images/boran.jpeg"
-// },
-
-// {
-//     id: "IDL-BOR-054",
-//     name: "Boran Cattle",
-//     breed: "boran",
-//     none:"R11,000",
-//     image: "images/boran.jpeg"
-// },
-
-// {
-//     id: "IDL-BRA-055",
-//     name: "Brahman Cattle",
-//     breed: "brahman",
-//     // none:"R8,000",
-//     image: "images/brahman.jpeg"
-// },
-
-// {
-//     id: "IDL-BRA-056",
-//     name: "Brahman Cattle",
-//     breed: "brahman",
-//     // none:"R8,000",
-//     image: "images/brahman.jpeg"
-// },
-
-// {
-//     id: "IDL-ANG-057",
-//     name: "Angus Cattle",
-//     breed: "angus",
-//     none:"R12,500",
-//     image: "images/angus.jpeg"
-// },
-
-// {
-//     id: "IDL-ANG-058",
-//     name: "Angus Cattle",
-//     breed: "angus",
-//     none:"R12,500",
-//     image: "images/angus.jpeg"
-// },
-
-// {
-//     id: "IDL-NGU-059",
-//     name: "Nguni Cattle",
-//     breed: "nguni",
-//     // none:"R9,500",
-//     image: "images/nguni.jpeg"
-// },
-
-// {
-//     id: "IDL-NGU-060",
-//     name: "Nguni Cattle",
-//     breed: "nguni",
-//     // none:"R9,500",
-//     image: "images/nguni.jpeg"
-// },
-
-// {
-//     id: "IDL-BOR-061",
-//     name: "Boran Cattle",
-//     breed: "boran",
-//     none:"R11,000",
-//     image: "images/boran.jpeg"
-// },
-
-// {
-//     id: "IDL-BOR-062",
-//     name: "Boran Cattle",
-//     breed: "boran",
-//     none:"R11,000",
-//     image: "images/boran.jpeg"
-// },
-
-// {
-//     id: "IDL-BRA-063",
-//     name: "Brahman Cattle",
-//     breed: "brahman",
-//     // none:"R8,000",
-//     image: "images/brahman.jpeg"
-// },
-
-// {
-//     id: "IDL-BRA-064",
-//     name: "Brahman Cattle",
-//     breed: "brahman",
-//     // none:"R8,000",
-//     image: "images/brahman.jpeg"
-// },
-
-// {
-//     id: "IDL-ANG-065",
-//     name: "Angus Cattle",
-//     breed: "angus",
-//     none:"R12,500",
-//     image: "images/angus.jpeg"
-// },
-
-// {
-//     id: "IDL-ANG-066",
-//     name: "Angus Cattle",
-//     breed: "angus",
-//     none:"R12,500",
-//     image: "images/angus.jpeg"
-// },
-
-// {
-//     id: "IDL-NGU-067",
-//     name: "Nguni Cattle",
-//     breed: "nguni",
-//     // none:"R9,500",
-//     image: "images/nguni.jpeg"
-// },
-
-// {
-//     id: "IDL-NGU-068",
-//     name: "Nguni Cattle",
-//     breed: "nguni",
-//     // none:"R9,500",
-//     image: "images/nguni.jpeg"
-// },
-
-// {
-//     id: "IDL-BOR-069",
-//     name: "Boran Cattle",
-//     breed: "boran",
-//     none:"R11,000",
-//     image: "images/boran.jpeg"
-// },
-
-// {
-//     id: "IDL-BOR-070",
-//     name: "Boran Cattle",
-//     breed: "boran",
-//     none:"R11,000",
-//     image: "images/boran.jpeg"
-// },
-];
-
-
-
-
-const cattleContainer = document.querySelector('.service-list');
-
-
-function displayCattle(cattleToDisplay) {
-
-    cattleContainer.innerHTML = '';
-
-    cattleToDisplay.forEach(cow => {
-
-        const serviceContent = document.createElement('div');
-
-        serviceContent.classList.add(
-            'service-content',
-            'swiper-slide'
-        );
-
-        serviceContent.dataset.cattleId = cow.id;
-
-        serviceContent.innerHTML = `
-            <img src="${cow.image}" alt="${cow.name}">
-
-            <h3>${cow.name}</h3>
-
-            <p class="service-content-price">
-              
-            </p>
-
-            <a 
-                href="#contact"
-                class="service-btn"
-                data-cattle-id="${cow.id}"
-                data-cattle-name="${cow.name}"
-                data-cattle-price="${cow.price}"
-            >
-                Enquire Now
-            </a>
-        `;
-
-        cattleContainer.appendChild(serviceContent);
-    });
-}
-
-
-const filterButtons = document.querySelectorAll('.filter-btn');
-
-
-
-
-filterButtons.forEach(button => {
-
-    button.addEventListener('click', () => {
-
-        const filter = button.dataset.filter;
-
-        filterButtons.forEach(btn => {
-            btn.classList.remove('active');
-        });
-
-        button.classList.add('active');
-
-        if (filter === 'all') {
-
-            displayCattle(cattle);
-
-        } else {
-
-            const filteredCattle = cattle.filter(cow => {
-                return cow.breed === filter;
-            });
-
-            displayCattle(filteredCattle);
-        }
-    });
-
-});
-
-
-displayCattle(cattle);
-
-
-
-const aboutToggle = document.querySelector('#aboutToggle');
-const aboutMore = document.querySelector('#aboutMore');
-
-aboutToggle.addEventListener('click', () => {
-
-    aboutMore.classList.toggle('show');
-
-    if (aboutMore.classList.contains('show')) {
-        aboutToggle.textContent = 'Show Less';
-    } else {
-        aboutToggle.textContent = 'Learn More';
+        storyMoreBtn.textContent = 'Read More';
     }
 
 });
